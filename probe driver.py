@@ -2,7 +2,8 @@ import serial
 import time
 import csv
 from datetime import datetime
-
+current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+filename= current_time + "_measurement_file.csv"
 def cleaner(data):
     formattedData=None
     if data[0]=='pH' or data[0]=='COND':
@@ -11,7 +12,7 @@ def cleaner(data):
         units=data[2]
         temp=data[5]
         tempunits=data[6]
-        formattedData={'probe mode':mode,'Value':value,'Units':units,'Temperature':temp,'Temperature units':tempunits}
+        formattedData={"probe mode":mode, "Value":value, "Units":units, "Temperature":temp, "Temperature units":tempunits}
     else:
         raise Exception("mode neither ph nor COND??")
     return(formattedData)
@@ -30,7 +31,7 @@ def extract_measurement(lines):
     CH1=cleaner(listCH1)
     CH2=cleaner(listCH2)
     return CH1,CH2
-def continuous_measurement(port='COM7', interval=10, csv_file='measurement_log.csv'):#Port is comm port, check in device manager for the usb port
+def continuous_measurement(port='COM7', interval=10, csv_file=filename):#Port is comm port, check in device manager for the usb port
     """Continuously reads pH, conductivity, and temperatures, logs them to a CSV with timestamp and relative time."""
     start_time = time.time()
 
@@ -56,18 +57,18 @@ def continuous_measurement(port='COM7', interval=10, csv_file='measurement_log.c
                     time.sleep(0.1)
                 try:
                     CH1,CH2 = extract_measurement(lines)#find the channels, this may not work with one channel
-                    if CH1['probe mode']=='pH':
-                        ph_value=CH1['Value']
-                        ph_temp=CH1['Temperature']
-                        if CH2['probe mode']=='COND':
-                            cond_value=CH2['Value']
-                            cond_temp=CH2['Temperature']
-                    elif CH1['probe mode']=='COND':
-                        ph_value=CH1['Value']
-                        ph_temp=CH1['Temperature']
-                        if CH2['probe mode']=='pH':
-                            cond_value=CH2['Value']
-                            cond_temp=CH2['Temperature']
+                    if CH1["probe mode"]== "pH":
+                        ph_value=CH1["Value"]
+                        ph_temp=CH1["Temperature"]
+                        if CH2["probe mode"]== "COND":
+                            cond_value=CH2["Value"]
+                            cond_temp=CH2["Temperature"]
+                    elif CH1["probe mode"]== "COND":
+                        ph_value=CH1["Value"]
+                        ph_temp=CH1["Temperature"]
+                        if CH2["probe mode"]== "pH":
+                            cond_value=CH2["Value"]
+                            cond_temp=CH2["Temperature"]
                     else:
                         print("Error determining modes, fix the code :)")
                         ph_value=None
