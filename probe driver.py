@@ -2,7 +2,7 @@ import serial
 import time
 import csv
 from datetime import datetime
-current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+current_time = datetime.now().strftime('%Y-%m-%d %H%M%S')
 filename= current_time + "_measurement_file.csv"
 def cleaner(data):
     formattedData=None
