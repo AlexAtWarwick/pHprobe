@@ -30,7 +30,7 @@ def extract_measurement(lines):
     CH1=cleaner(listCH1)
     CH2=cleaner(listCH2)
     return CH1,CH2
-def continuous_measurement(port='COM7', interval=2, csv_file='measurement_log.csv'):#Port is comm port, check in device manager for the usb port
+def continuous_measurement(port='COM7', interval=10, csv_file='measurement_log.csv'):#Port is comm port, check in device manager for the usb port
     """Continuously reads pH, conductivity, and temperatures, logs them to a CSV with timestamp and relative time."""
     start_time = time.time()
 
@@ -83,6 +83,7 @@ def continuous_measurement(port='COM7', interval=2, csv_file='measurement_log.cs
                     file.flush()
                 except:
                     print("Channels not found, meter in correct mode?")
+                    print(lines)
                 elapsed_time = time.time() - loop_start_time
                 time.sleep(max(0, interval - elapsed_time))
 
