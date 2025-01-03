@@ -5,6 +5,7 @@ from datetime import datetime
 current_time = datetime.now().strftime('%Y-%m-%d %H %M %S')
 filename= current_time + "_measurement_file.csv"
 def cleaner(data):
+    """Takes the string given by the meter and determines if it is in pH or COND mode, then cleans up the data, should detect errors"""
     formattedData=None
     if data[0]=='pH' or data[0]=='COND':
         mode=data[0]
@@ -32,7 +33,7 @@ def extract_measurement(lines):
     CH2=cleaner(listCH2)
     return CH1,CH2
 def continuous_measurement(port='COM7', interval=10, csv_file=filename):#Port is comm port, check in device manager for the usb port
-    """Continuously reads pH, conductivity, and temperatures, logs them to a CSV with timestamp and relative time."""
+    """Continuously reads pH, conductivity, and temperatures, logs them to a CSV with a timestamp and relative time."""
     start_time = time.time()
 
     with open(csv_file, mode='w', newline='') as file:
@@ -56,7 +57,7 @@ def continuous_measurement(port='COM7', interval=10, csv_file=filename):#Port is
                     lines.append(line)
                     time.sleep(0.1)
                 try:
-                    CH1,CH2 = extract_measurement(lines)#find the channels, this may not work with one channel
+                    CH1,CH2 = extract_measurement(lines)#find the channels, this may not work with one channel, could also be rewritten with try and exception blocks
                     if CH1["probe mode"]== "pH":
                         ph_value=CH1["Value"]
                         ph_temp=CH1["Temperature"]
@@ -96,5 +97,5 @@ def continuous_measurement(port='COM7', interval=10, csv_file=filename):#Port is
             if 'ser' in locals() and ser.is_open:
                 ser.close()
                 print("Serial port closed.")
-
+#runs the script
 continuous_measurement()
