@@ -128,12 +128,3 @@ class OrionControl:
     def __exit__(self, exc_type, exc_value, traceback):
         self.close()
 
-# ---------- Example Usage ----------
-if __name__ == "__main__":
-    try:
-        with OrionControl(port="COM11") as meter:
-            result = meter.get_measurement()
-            if result:
-                print(result)
-    except OrionError as e:
-        logger.error(e)
